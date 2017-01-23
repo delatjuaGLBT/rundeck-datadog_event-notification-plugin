@@ -4,22 +4,20 @@ import com.dtolabs.rundeck.core.plugins.configuration.ValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode
 
-// See http://docs.datadoghq.com/ja/api/
+// See https://www.opsgenie.com/docs/web-api/alert-api#createAlertRequest 
 
-// curl  -X POST -H "Content-type: application/json" \
-// -d '{
-//       "title": "Did you hear the news today?",
-//       "text": "Oh boy!",
-//       "priority": "normal",
-//       "tags": ["environment:test"],
-//       "alert_type": "info"
-//   }' \
-// 'https://app.datadoghq.com/api/v1/events?api_key=xxxxxxxxxxxxxxxxxxxxxxxxxx'
+// curl -XPOST 'https://api.opsgenie.com/v1/json/alert' -d '
+// {
+//     "apiKey": "eb243592-faa2-4ba2-a551q-1afdf565c889",
+//     "message" : "WebServer3 is down",
+//     "teams" : ["operations", "developers"]
+// }'
+// 'https://api.opsgenie.com/v1/json/alert?apiKey=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 
 class DEFAULTS {
-    static String DATADOG_EVENT_URL = "https://app.datadoghq.com/api/v1/events?api_key="
+    static String OPSGENIE_EVENT_URL = "https://api.opsgenie.com/v1/json/alert?apiKey="
     static String SUBJECT_LINE='Rundeck JOB: ${job.status} [${job.project}] \"${job.name}\" run by ${job.user} (#${job.execid})'
-    static String API_KEY='Your Datadog API Key'
+    static String API_KEY='e9288006-bda8-4b5d-9b84-860857fe9091'
 }
 
 /**
@@ -76,7 +74,7 @@ def triggerEvent(Map execution, Map configuration) {
   ]
 
   // Send the request.
-  def url = new URL(DEFAULTS.DATADOG_EVENT_URL+configuration.api_key)
+  def url = new URL(DEFAULTS.OPSGENIE_EVENT_URL+configuration.api_key)
   def connection = url.openConnection()
   connection.setRequestMethod("POST")
   connection.addRequestProperty("Content-type", "application/json")
@@ -94,7 +92,7 @@ def triggerEvent(Map execution, Map configuration) {
   JsonNode jsnode= json.readTree(response)
   def status = jsnode.get("status").asText()
   if (! "success".equals(status)) {
-      System.err.println("ERROR: DatadogEventNotification plugin status: " + status)
+      System.err.println("ERROR: OpsGenieEventNotification plugin status: " + status)
   }
 }
 
@@ -102,11 +100,11 @@ def triggerEvent(Map execution, Map configuration) {
  * Main
 **/
 rundeckPlugin(NotificationPlugin){
-    title="DataDog_Event"
+    title="OpsGenie_Event"
     description="Create a Trigger event."
     configuration{
         subject title:"Subject", description:"Incident subject line. Can contain \${job.status}, \${job.project}, \${job.name}, \${job.group}, \${job.user}, \${job.execid}", defaultValue:DEFAULTS.SUBJECT_LINE, required:true
-        api_key title:"API Key", description:"Datadog API key", defaultValue:DEFAULTS.API_KEY, required:true
+        api_key title:"API Key", description:"OpsGenie API key", defaultValue:DEFAULTS.API_KEY, required:true
     }
     onstart { Map execution, Map configuration ->
         triggerEvent(execution, configuration)
