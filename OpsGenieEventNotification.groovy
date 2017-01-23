@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode
 
 // See https://www.opsgenie.com/docs/web-api/alert-api#createAlertRequest 
-
 // curl -XPOST 'https://api.opsgenie.com/v1/json/alert' -d '
 // {
 //     "apiKey": "eb243592-faa2-4ba2-a551q-1afdf565c889",

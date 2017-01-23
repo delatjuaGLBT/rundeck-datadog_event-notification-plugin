@@ -1,5 +1,7 @@
 ## Rundeck OpsGenie Notification Plugin
 
+## Based on https://github.com/inokappa/rundeck-datadog_event-notification-plugin
+
 ### Installation
 
 Copy the groovy script to the plugins directory:
