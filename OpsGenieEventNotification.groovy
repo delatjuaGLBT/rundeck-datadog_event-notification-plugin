@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode
 class DEFAULTS {
     static String OPSGENIE_EVENT_URL = "https://api.opsgenie.com/v1/json/alert?apiKey="
     static String SUBJECT_LINE='Rundeck JOB: ${job.status} [${job.project}] \"${job.name}\" run by ${job.user} (#${job.execid})'
-    static String API_KEY='OpsGenie API Key'
+    static String API_KEY='Your OpsGenie API Key here'
 }
 
 /**
@@ -59,10 +59,10 @@ def triggerEvent(Map execution, Map configuration) {
   def expandedTitle = titleString(configuration.subject, [execution:execution])
   def expandedAlertinfo = alertInfo([execution:execution])
   def job_data = [
-    title: expandedTitle,
-    text: "Please see: " + execution.href,
+    message: "Please see: " + eexpandedTitle + execution.href,
+    description: expandedAlertinfo,
     tags: "rundeck:" + execution.job.name,
-    alert_type: expandedAlertinfo
+    teams: "TechOps"
   ]
 
   // Send the request.
