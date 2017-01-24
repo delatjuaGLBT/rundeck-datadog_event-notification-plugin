@@ -5,18 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode
 
 // See https://www.opsgenie.com/docs/web-api/alert-api#createAlertRequest 
-// curl -XPOST 'https://api.opsgenie.com/v1/json/alert' -d '
-// {
-//     "apiKey": "eb243592-faa2-4ba2-a551q-1afdf565c889",
-//     "message" : "WebServer3 is down",
-//     "teams" : ["operations", "developers"]
-// }'
-// 'https://api.opsgenie.com/v1/json/alert?apiKey=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 
 class DEFAULTS {
     static String OPSGENIE_EVENT_URL = "https://api.opsgenie.com/v1/json/alert?apiKey="
     static String SUBJECT_LINE='Rundeck JOB: ${job.status} [${job.project}] \"${job.name}\" run by ${job.user} (#${job.execid})'
-    static String API_KEY='e9288006-bda8-4b5d-9b84-860857fe9091'
+    static String API_KEY='OpsGenie API Key'
 }
 
 /**
