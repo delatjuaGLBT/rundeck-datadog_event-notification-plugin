@@ -59,7 +59,7 @@ def triggerEvent(Map execution, Map configuration) {
   def expandedTitle = titleString(configuration.subject, [execution:execution])
   def expandedAlertinfo = alertInfo([execution:execution])
   def job_data = [
-    message: "Please see: " + eexpandedTitle + execution.href,
+    message: "Please see: " + expandedTitle + execution.href,
     description: expandedAlertinfo,
     tags: "rundeck:" + execution.job.name,
     teams: "TechOps"
