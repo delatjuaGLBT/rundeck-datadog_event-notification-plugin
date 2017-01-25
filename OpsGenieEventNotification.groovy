@@ -59,9 +59,9 @@ def triggerEvent(Map execution, Map configuration) {
   def expandedTitle = titleString(configuration.subject, [execution:execution])
   def expandedAlertinfo = alertInfo([execution:execution])
   def job_data = [
-    message: "Please see: " + expandedTitle + execution.href,
-    description: expandedAlertinfo,
-    tags: "rundeck:" + execution.job.name,
+    message: "Please see: " + execution.href,
+    description: expandedAlertinfo + expandedTitle,
+    tags: execution.job.name,
     teams: "TechOps"
   ]
 
@@ -81,7 +81,7 @@ def triggerEvent(Map execution, Map configuration) {
   // process the response.
   def response = connection.content.text
   //System.err.println("DEBUG: response: "+response)
-  JsonNode jsnode= json.readTree(response)
+  JsonNode jsnode = json.readTree(response)
   def status = jsnode.get("status").asText()
   if (! "success".equals(status)) {
       System.err.println("ERROR: OpsGenieEventNotification plugin status: " + status)
